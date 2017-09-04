@@ -30,7 +30,6 @@ import hudson.model.StreamBuildListener;
 import hudson.model.TaskListener;
 import jenkins.model.InterruptedBuildAction;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.aether.artifact.Artifact;
 import org.jenkinsci.plugins.pipeline.maven.publishers.JenkinsMavenEventSpyLogsPublisher;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 import org.w3c.dom.Element;
@@ -117,6 +116,16 @@ public class MavenSpyLogProcessor implements Serializable {
                         }
                     }
                 }
+
+                FilePath[] mavenSpyLogsInterruptedList = mavenSpyLogFolder.list("maven-spy-*.log.tmp");
+                if (mavenSpyLogsInterruptedList.length > 0) {
+                    listener.getLogger().print("[withMaven] One or multiple Maven executions have been ignored by the " +
+                            "Jenkins Pipeline Maven Plugin because they have been interrupted before completion " +
+                            "(" + mavenSpyLogsInterruptedList.length + "). See ");
+                    listener.hyperlink("Pipeline Maven Plugin FAQ", "https://wiki.jenkins.io/display/JENKINS/Pipeline+Maven+Plugin#PipelineMavenPlugin-mavenExecutionInterrupted");
+                    listener.getLogger().println(" for more details.");
+                }
+
             } catch (SAXException e) {
                 Run run = context.get(Run.class);
                 if (run.getActions(InterruptedBuildAction.class).isEmpty()) {
