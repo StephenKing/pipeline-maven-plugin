@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.pipeline.maven;
 
-import hudson.DescriptorExtensionList;
+import FOOOhudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
